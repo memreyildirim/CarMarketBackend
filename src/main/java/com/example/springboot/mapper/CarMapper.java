@@ -19,6 +19,7 @@ public class CarMapper {
         dto.setModel(car.getModel());
         dto.setPrice(car.getPrice());
         dto.setFilePath(car.getPhoto() != null ? car.getPhoto().getFilePath() : null);
+        dto.setBrand(car.getBrand()); // sıkıntı olursa burayı sil
 
 
         return dto;
