@@ -15,17 +15,6 @@ public class SpringbootApplication {
         SpringApplication.run(SpringbootApplication.class, args);
     }
 
-    @Bean
-    public CommandLineRunner init(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        return args -> {
-            if (userRepository.findByUsername("emre").isEmpty()) {
-                User user = new User();
-                user.setUsername("emre");
-                user.setPassword(passwordEncoder.encode("emre123"));
-                user.setRole("USER");
-                userRepository.save(user);
-            }
-        };
-    }
+
 
 }
