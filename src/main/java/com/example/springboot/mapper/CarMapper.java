@@ -27,13 +27,14 @@ public class CarMapper {
 
     public static Car toEntity(CarDto dto){
         Car car = new Car();
+        car.setCarId(dto.getCarId()); // ID'yi set et
         car.setModel(dto.getModel());
         car.setPrice(dto.getPrice());
         car.setIsNew(dto.getIsNew());
         car.setReleaseDatetime(dto.getReleaseDatetime());
         car.setEngineVolume(dto.getEngineVolume());
         car.setCarSpecification(dto.getCarSpecification());
-        car.setBrand(new Brand()); // dikkat!
+        car.setBrand(dto.getBrand()); // DTO'dan gelen brand'i kullan
         return car;
     }
 

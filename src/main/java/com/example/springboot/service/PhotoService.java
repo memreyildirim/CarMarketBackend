@@ -23,7 +23,7 @@ public class PhotoService {
 
     private static final Logger logger = LoggerFactory.getLogger(PhotoService.class);
 
-    private String uploadDir = "C:/Users/mehmetemre.yildirim/uploads";
+    private String uploadDir = "C:/Users/mey19/uploads";
     ;
 
     @Autowired

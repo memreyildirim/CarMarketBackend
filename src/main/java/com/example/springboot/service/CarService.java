@@ -87,15 +87,14 @@ public class CarService {
                     return new CarNotFoundException("Car not found with ID: " + id);
                         });
 
-        existingCar.setBrand(updatedCarData.getBrand());
-        existingCar.setModel(updatedCarData.getModel());
-        existingCar.setPrice(updatedCarData.getPrice());
-        existingCar.setCarSpecification(updatedCarData.getCarSpecification());
-        existingCar.setIsNew(updatedCarData.getIsNew());
-        existingCar.setEngineVolume(updatedCarData.getEngineVolume());
-        existingCar.setReleaseDatetime(updatedCarData.getReleaseDatetime());
+        // Mevcut ID'yi koru
+        Long existingId = existingCar.getCarId();
 
-        Car savedCar = carRepository.save(existingCar);
+        // DTO'dan yeni entity oluştur
+        Car updatedCar = CarMapper.toEntity(updatedCarData);
+        updatedCar.setCarId(existingId); // ID'yi koru
+
+        Car savedCar = carRepository.save(updatedCar);
         return CarMapper.toCarDto(savedCar);
     }
 

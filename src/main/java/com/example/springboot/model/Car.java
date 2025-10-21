@@ -29,8 +29,8 @@ public class Car {
     private String model;
 
 
-    @Lob
-    @Column(name = "car_specification")
+
+    @Column(name = "car_specification", columnDefinition = "TEXT")
     private String carSpecification;
 
     @Column(name = "engine_volume")

@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4160")
+@CrossOrigin(origins = {"http://localhost:4160","https://sortably-nonaffiliating-my.ngrok-free.dev"})
 @RestController
 @RequestMapping("/api/v1/cars")
 public class CarController {
