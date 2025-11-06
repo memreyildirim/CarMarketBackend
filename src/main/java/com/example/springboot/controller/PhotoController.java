@@ -13,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-@CrossOrigin(origins = "http://localhost:4160")
+@CrossOrigin(origins = {"http://localhost:4160","https://sortably-nonaffiliating-my.ngrok-free.dev"})
 @RestController
 @RequestMapping("/api/v1/photo")
 public class PhotoController {

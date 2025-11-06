@@ -12,6 +12,7 @@ import com.example.springboot.service.PhotoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -141,6 +142,39 @@ public class CarController {
     public ResponseEntity<Void> deleteCar(@PathVariable Long id){
         carService.deleteCar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/timeless")
+    public ResponseEntity<?> createCarWithPhoto2(
+            @RequestParam("brandId") Long brandId,
+            @RequestParam("model") String model,
+            @RequestParam("carSpecification") String carSpecification,
+            @RequestParam("engineVolume") Float engineVolume,
+            @RequestParam("isNew") Boolean isNew,
+            @RequestParam("price") BigDecimal price,
+            @RequestParam("photo") MultipartFile photo
+    ) {
+        Brand brand = brandRepository.findById(brandId).orElseThrow();
+        Car car = new Car();
+        car.setBrand(brand);
+        car.setModel(model);
+        car.setCarSpecification(carSpecification);
+        car.setEngineVolume(engineVolume);
+        car.setIsNew(isNew);
+        car.setPrice(price);
+
+
+        car = carService.saveCar(car); // 👈 Önce araba kayıt
+
+        if (photo != null && !photo.isEmpty()) {
+            try {
+                photoService.savePhoto(photo, car.getCarId()); // 👈 Fotoğrafı araba ile ilişkilendir
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return ResponseEntity.ok().build();
     }
 
 
