@@ -108,6 +108,7 @@ public class CarService {
         logger.info("Car with ID: {} was deleted", id);
     }
 
+    //pageable sız çalışan tüm car ları getiren service metodu
     public List<CarDto> getAllCarss(){
         try {
             logger.info("Fetching all cars from repository");
@@ -122,6 +123,9 @@ public class CarService {
             throw new RuntimeException(e);
         }
     }
+
+
+
 
 
 }

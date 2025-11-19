@@ -19,7 +19,7 @@ public class CartController {
     @Autowired private com.example.springboot.repository.UserRepository userRepository;
 
     private User currentUser(UserDetails principal) {
-        return userRepository.findByUsername(principal.getUsername()).orElseThrow();
+        return userRepository.findByemail(principal.getUsername()).orElseThrow();
     }
 
     @GetMapping

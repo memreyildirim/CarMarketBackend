@@ -4,6 +4,8 @@ import com.example.springboot.auth.JwtUtil;
 import com.example.springboot.dto.JwtResponse;
 import com.example.springboot.dto.LoginRequest;
 import com.example.springboot.dto.RegisterRequest;
+import com.example.springboot.exception.UserNameAlreadyExistException;
+import com.example.springboot.exception.UsernameNotFoundException;
 import com.example.springboot.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +34,14 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request){
         try{
+            if (request.getEmail() == null || request.getEmail().trim().isEmpty()) {
+                return ResponseEntity.badRequest().body("Email must be provided");
+            }
+
+            String email = request.getEmail().trim();
+
             Authentication auth = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+                    new UsernamePasswordAuthenticationToken(email, request.getPassword())
             );
 
             UserDetails userDetails = (UserDetails) auth.getPrincipal();
@@ -42,13 +50,19 @@ public class AuthController {
             return ResponseEntity.ok(jwtResponse);
         } catch (AuthenticationException e){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed");
+        } catch (UsernameNotFoundException e){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
         }
     }
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody RegisterRequest request){
-        userService.registerUser(request);
-        return ResponseEntity.ok("User registered successfully");
+        try {
+            userService.registerUser(request);
+            return ResponseEntity.ok("User registered succesfully");
+        }catch (UserNameAlreadyExistException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
     }
 
 

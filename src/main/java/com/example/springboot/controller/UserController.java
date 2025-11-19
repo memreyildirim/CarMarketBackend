@@ -20,9 +20,9 @@ public class UserController {
 
     @GetMapping("/profile")
     public ResponseEntity<UserProfile> getProfile(Authentication authentication) {
-        String username = authentication.getName();
-        User user = userService.findByUsername(username);
-        UserProfile userProfile = new UserProfile(user.getUsername(),user.getRole());
+        String email = authentication.getName();
+        User user = userService.findByEmail(email);
+        UserProfile userProfile = new UserProfile(user.getUsername(),user.getEmail(),user.getRole());
         return ResponseEntity.ok(userProfile);
 
     }
