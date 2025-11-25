@@ -22,7 +22,7 @@ public class BrandController {
         return brandService.getAllBrands();
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public Brand addBrand(@RequestBody Brand brand) {
         return brandService.addBrand(brand);
     }

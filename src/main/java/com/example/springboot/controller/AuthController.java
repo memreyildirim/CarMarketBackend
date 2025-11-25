@@ -4,6 +4,7 @@ import com.example.springboot.auth.JwtUtil;
 import com.example.springboot.dto.JwtResponse;
 import com.example.springboot.dto.LoginRequest;
 import com.example.springboot.dto.RegisterRequest;
+import com.example.springboot.exception.EmailALreadyExistException;
 import com.example.springboot.exception.UserNameAlreadyExistException;
 import com.example.springboot.exception.UsernameNotFoundException;
 import com.example.springboot.service.UserService;
@@ -61,6 +62,16 @@ public class AuthController {
             userService.registerUser(request);
             return ResponseEntity.ok("User registered succesfully");
         }catch (UserNameAlreadyExistException e){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/admin/register")
+    public ResponseEntity<String> addAdmin(@RequestBody RegisterRequest request){
+        try{
+            userService.registerAdmin(request);
+            return ResponseEntity.ok("Admin added succesfully");
+        }catch (EmailALreadyExistException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }

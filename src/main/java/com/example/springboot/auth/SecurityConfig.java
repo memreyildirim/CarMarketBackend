@@ -47,6 +47,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
                         .requestMatchers("api/v1/**").permitAll()  //web çalışması için
+                        .requestMatchers("/api/v1/cars/filter").permitAll()
                         .requestMatchers("/test").permitAll()
                         .anyRequest().authenticated()
                 )

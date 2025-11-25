@@ -81,5 +81,20 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    public void registerAdmin(RegisterRequest adminRequest) {
+        boolean emailExist = userRepository.findByemail(adminRequest.getEmail()).isPresent();
+        if (emailExist) {
+            throw new UserNameAlreadyExistException("This email already taken from another one admin");
+        }
+
+        User user = new User();
+        user.setUsername(adminRequest.getUsername());
+        user.setEmail(adminRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(adminRequest.getPassword()));
+        user.setRole("ADMIN");
+
+        userRepository.save(user);
+    }
+
 
 }

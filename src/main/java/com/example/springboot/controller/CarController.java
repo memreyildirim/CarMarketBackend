@@ -53,15 +53,19 @@ public class CarController {
         return ResponseEntity.ok(carDtos);
     }
 
-    //filtering ekleyeceğimde bu endpoint kullanılacak
+    //filtering ekleyeceğimde bu endpoint kullanılacak (web tarafı)
     @GetMapping("/filter")
-    public Page<Car> getPagedCars(
+    public ResponseEntity<Page<CarDto>> getPagedCars(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "model") String sortBy,
             @RequestParam(defaultValue = "true") boolean asc
     ) {
-        return carService.getCars(page, size, sortBy, asc);
+        Page<Car> carPage = carService.getCars(page, size, sortBy, asc);
+
+        Page<CarDto> carDtoPage = carPage.map(CarMapper::toCarDto); //car -> CarMapper.toCarDto(car)
+
+        return ResponseEntity.ok(carDtoPage);
     }
 
     //asıl çalışan fotosuz
