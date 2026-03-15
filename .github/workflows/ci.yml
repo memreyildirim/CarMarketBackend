@@ -29,5 +29,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Gradle wrapper izni ver
+        run: chmod +x gradlew
+
       - name: Testleri çalıştır
         run: ./gradlew test
