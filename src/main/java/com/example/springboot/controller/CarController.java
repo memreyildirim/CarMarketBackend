@@ -111,17 +111,17 @@ public class CarController {
         car.setPrice(price);
         car.setReleaseDatetime(releaseDatetime);
 
-        car = carService.saveCar(car); // 👈 Önce araba kayıt
+        car = carService.saveCar(car); //  Önce araba kayıt
 
         if (photo != null && !photo.isEmpty()) {
             try {
-                photoService.savePhoto(photo, car.getCarId()); // 👈 Fotoğrafı araba ile ilişkilendir
+                photoService.savePhoto(photo, car.getCarId()); //  Fotoğrafı araba ile ilişkilendir
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(car.getCarId());
     }
 
 

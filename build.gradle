@@ -44,6 +44,12 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.34'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    //Selenium Java Library
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.18.1'
+
+    //RestAssured Libraray for api request from Java
+    testImplementation 'io.rest-assured:rest-assured:5.4.0'
 }
 
 tasks.named('test') {
