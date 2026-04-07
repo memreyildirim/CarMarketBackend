@@ -29,7 +29,6 @@ Uygulama varsayılan olarak `10160` portundan çalışır.
 - `DB_PASSWORD`
 - `JWT_SECRET_KEY`
 
-> Not: Repo `.gitignore` içinde `.env` ignore’lanıyor. Lokal geliştirme için `.env` kullanabilirsin ama commit’leme.
 
 ### Güvenlik ve Kurulum Notları
 
