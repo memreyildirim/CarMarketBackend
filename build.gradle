@@ -56,10 +56,10 @@ tasks.named('test') {
     useJUnitPlatform()
 
     // UI/Selenium test paketini exclude et
-    exclude 'com/example/springboot/pages/**'
+    //exclude 'com/example/springboot/pages/**'
 
     // E2E workflow testini exclude et
-    exclude 'com/example/springboot/CarWorkflowTest.class'
+    //exclude 'com/example/springboot/CarWorkflowTest.class'
 
     // Gerekirse context load testini de şimdilik exclude etmek istersen:
     // exclude 'com/example/springboot/SpringbootApplicationTests.class'

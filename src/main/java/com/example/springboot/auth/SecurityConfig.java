@@ -49,6 +49,12 @@ public class SecurityConfig {
                         .requestMatchers("api/v1/**").permitAll()  //web çalışması için
                         .requestMatchers("/api/v1/cars/filter").permitAll()
                         .requestMatchers("/test").permitAll()
+                        .requestMatchers(               //swagger ui dan endpointleri görüntülemek için
+                                        "/swagger-ui.html",
+                                        "/swagger-ui/**",
+                                        "/v3/api-docs/**",
+                                        "/v3/api-docs.yaml"
+                                ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())

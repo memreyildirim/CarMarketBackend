@@ -1,5 +1,6 @@
 package com.example.springboot;
 
+import com.example.springboot.exception.CarNotFoundException;
 import com.example.springboot.model.Brand;
 import com.example.springboot.model.Car;
 import com.example.springboot.repository.CarRepository;
@@ -147,5 +148,21 @@ public class CarServiceTest {
         carService.deleteCar(18L);
 
         Mockito.verify(carRepository).delete(car);
+    }
+
+
+    @Test
+    void shouldThrowWhenCarNotFoundById() {
+        // Arrange
+        Long notExistingId = 99L;
+        Mockito.when(carRepository.findById(notExistingId)).thenReturn(Optional.empty());
+
+        // Act + Assert
+        Assertions.assertThrows(
+                CarNotFoundException.class,
+                () -> carService.findCarById(notExistingId)
+        );
+
+        Mockito.verify(carRepository).findById(notExistingId);
     }
 }

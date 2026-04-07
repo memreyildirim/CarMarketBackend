@@ -1,40 +1,104 @@
 package com.example.springboot.pages;
 
 import com.example.springboot.BaseTest;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CarListTest extends BaseTest {
 
+    private static final String BASE_URL = "http://localhost:4160";
+    private static final String LOGIN_URL = BASE_URL + "/login-screen";
+    private static final String TEST_EMAIL = "mina@gmail.com";
+    private static final String TEST_PASSWORD = "mina123";
+
+    private LoginPage loginPage;
+    private CarListPage carListPage;
+
+    @BeforeEach
+    void setUp() {
+        loginPage = new LoginPage(driver);
+        carListPage = new CarListPage(driver);
+        navigateAndLogin();
+    }
+
+    private void navigateAndLogin() {
+        driver.get(LOGIN_URL);
+        loginPage.login(TEST_EMAIL, TEST_PASSWORD);
+        carListPage.waitForPageLoad();
+    }
+
     @Test
-    void testCarFilteringAndListing() {
-        LoginPage loginPage = new LoginPage(driver);
-        CarListPage carListPage = new CarListPage(driver);
-
-        // 1. Giriş Yap
-        driver.get("http://localhost:4160/login-screen");
-        loginPage.login("mina@gmail.com", "mina123");
-
-        // 2. Sayfanın yüklendiğini doğrula,
-        org.openqa.selenium.support.ui.WebDriverWait wait =
-                new org.openqa.selenium.support.ui.WebDriverWait(driver, java.time.Duration.ofSeconds(5));
-        wait.until(org.openqa.selenium.support.ui.ExpectedConditions.urlContains("/car-list"));
-
-        // 3. Başlangıçtaki araç sayısını al
+    void testCarFilteringWithHighPriceRange() {
         int initialCount = carListPage.getVisibleCarCount();
-        System.out.println("Başlangıçt healthiest araç sayısı: " + initialCount);
-        assertTrue(initialCount > 0, "Tablo boş gelmemeli!");
+        System.out.println("Initial car count: " + initialCount);
+        
+        assertTrue(initialCount > 0, 
+            "Car list should not be empty on initial load");
 
-        // 4. Filtreleme Testi (Negatif/Sınır Testi)
-        // Çok yüksek bir fiyat girerek listenin daraldığını görelim
-        carListPage.filterByMinPrice("9999999");
-
-        // Tablonun güncellenmesi için kısa bir bekleme (Angular asenkron olduğu için)
-        // Normalde burada 'spinner' beklemek daha profesyoneldir
-        try { Thread.sleep(2000); } catch (InterruptedException e) {}
+        carListPage.applyFilters("10000000", "20000000");
 
         int filteredCount = carListPage.getVisibleCarCount();
-        System.out.println("Filtre sonrası araç sayısı: " + filteredCount);
-        assertTrue(filteredCount < initialCount, "Filtreleme sonrası araç sayısı azalmalıydı!");
+        System.out.println("Filtered car count: " + filteredCount);
+        
+        assertTrue(filteredCount < initialCount, 
+            String.format("Filtered count (%d) should be less than initial count (%d)", 
+                filteredCount, initialCount));
     }
+
+    @Test
+    void testCarListDisplayed() {
+        assertTrue(carListPage.isCarListDisplayed(), 
+            "Car list table should be displayed after login");
+        
+        int carCount = carListPage.getVisibleCarCount();
+        assertTrue(carCount > 0, 
+            "At least one car should be visible in the list");
+    }
+
+    @Test
+    void testMinPriceFilterOnly() {
+        int initialCount = carListPage.getVisibleCarCount();
+        
+        carListPage.filterByMinPrice("5000000");
+        carListPage.waitForTableUpdate();
+        
+        int filteredCount = carListPage.getVisibleCarCount();
+        
+        assertTrue(filteredCount <= initialCount, 
+            "Applying min price filter should reduce or maintain car count");
+    }
+
+    @Test
+    void testMaxPriceFilterOnly() {
+        int initialCount = carListPage.getVisibleCarCount();
+        
+        carListPage.filterByMaxPrice("1000000");
+        carListPage.waitForTableUpdate();
+        
+        int filteredCount = carListPage.getVisibleCarCount();
+        
+        assertTrue(filteredCount <= initialCount, 
+            "Applying max price filter should reduce or maintain car count");
+    }
+
+    @Test
+    void goToAddCar() throws InterruptedException {
+        carListPage.clickAddCar();
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.urlContains(BASE_URL+"/car-form"));
+
+        assertTrue(driver.getCurrentUrl().contains(BASE_URL+"/car-form"));
+    }
+
+//    @Test
+//    void isFirstCarModel(){
+//        carListPage.isFirstCarModel("Porsche");
+//    }
 }
