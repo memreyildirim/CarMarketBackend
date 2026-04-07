@@ -14,8 +14,8 @@ public class CarListTest extends BaseTest {
 
     private static final String BASE_URL = "http://localhost:4160";
     private static final String LOGIN_URL = BASE_URL + "/login-screen";
-    private static final String TEST_EMAIL = "mina@gmail.com";
-    private static final String TEST_PASSWORD = "mina123";
+    private static final String TEST_EMAIL = "mina@gmail.com"; //test için verilmiş default mail
+    private static final String TEST_PASSWORD = "mina123"; //test için verilmiş default password
 
     private LoginPage loginPage;
     private CarListPage carListPage;
